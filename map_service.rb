@@ -1,4 +1,10 @@
 class MapService
+  LIFE_BIRTH_COUNT = 3
+  LIFE_DEATH_UPPER_LIMIT = 3
+  LIFE_DEATH_BOTTOM_LIMIT = 2
+
+  class LifeEndsError < RuntimeError; end
+
   attr_reader :map
 
   def initialize(map)
@@ -15,8 +21,8 @@ class MapService
         alive_cells = next_cells.select(&:alive?)
         alive_cells_count = alive_cells.length
 
-        liven_up << e if e.dead? && alive_cells_count == 3
-        kill << e if e.alive? && (alive_cells_count > 3 || alive_cells_count < 2)
+        liven_up << e if e.dead? && alive_cells_count == LIFE_BIRTH_COUNT
+        kill << e if e.alive? && (alive_cells_count > LIFE_DEATH_UPPER_LIMIT || alive_cells_count < LIFE_DEATH_BOTTOM_LIMIT)
       end
     end
 
@@ -24,12 +30,6 @@ class MapService
     liven_up.each(&:live!)
 
     @map
-  end
-
-  def print
-    @map.each do |row|
-      puts "[#{row.map(&:state).join(', ')}]"
-    end
   end
 
   def next_to(i, j)

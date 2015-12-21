@@ -1,20 +1,5 @@
-require './cell.rb'
-require './map.rb'
+require './game_controller.rb'
 
-map = [
-  [Cell.new(false), Cell.new(true), Cell.new(true), Cell.new(false), Cell.new(false)],
-  [Cell.new(true), Cell.new(true), Cell.new(false), Cell.new(false), Cell.new(false)],
-  [Cell.new(true), Cell.new(false), Cell.new(false), Cell.new(false), Cell.new(false)],
-  [Cell.new(false), Cell.new(false), Cell.new(false), Cell.new(false), Cell.new(false)],
-  [Cell.new(false), Cell.new(false), Cell.new(false), Cell.new(false), Cell.new(false)],
-]
+gc = GameController.new
 
-m = MapService.new(map)
-
-m.print
-puts ''
-
-m.step
-m.print
-# m.step
-# m.print
+gc.start
