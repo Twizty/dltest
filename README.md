@@ -5,3 +5,4 @@
 * cd dltest
 * bundle
 * ruby main.rb
+* press Enter button to see generations
