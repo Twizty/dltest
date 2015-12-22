@@ -35,33 +35,37 @@ class MapService
   def next_to(i, j)
     res = []
 
-    res << @map[i-1][j]
+    # правая нижняя ячейка
     if @map[i-1].length > j + 1
       res << @map[i-1][j+1]
     else
       res << @map[i-1][0]
     end
-    res << @map[i-1][j-1]
 
     if @map.length > i + 1
       row = i + 1
     else
       row = 0
     end
+
+    # нижнаяя ячейка
     if @map[row].length > j + 1
       res << @map[row][j+1]
     else
       res << @map[row][0]
     end
-    res << @map[row][j]
-    res << @map[row][j-1]
 
+    # правая ячейка
     if @map[i].length > j + 1
       res << @map[i][j+1]
     else
       res << @map[i][0]
     end
 
+    res << @map[i-1][j]
+    res << @map[i-1][j-1]
+    res << @map[row][j]
+    res << @map[row][j-1]
     res << @map[i][j-1]
   end
 end

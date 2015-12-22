@@ -86,4 +86,18 @@ RSpec.describe MapService do
       expect(exprestion).to eq true
     end
   end
+
+  context '#next_to' do
+    ms = MapService.new [
+      [Cell.new(false), Cell.new(false), Cell.new(false), Cell.new(false), Cell.new(false)],
+      [Cell.new(false), Cell.new(false), Cell.new(false), Cell.new(false), Cell.new(false)],
+      [Cell.new(false), Cell.new(true), Cell.new(true), Cell.new(true), Cell.new(false)],
+      [Cell.new(false), Cell.new(false), Cell.new(false), Cell.new(false), Cell.new(false)],
+      [Cell.new(false), Cell.new(false), Cell.new(false), Cell.new(false), Cell.new(false)],
+    ]
+
+    it 'should return correct values' do
+      expect(ms.next_to(0, 0)).to include(ms.map[0][1], ms.map[1][1], ms.map[1][0], ms.map[-1][-1])
+    end
+  end
 end
