@@ -70,5 +70,20 @@ RSpec.describe MapService do
       [Cell.new(false), Cell.new(false), Cell.new(false), Cell.new(false), Cell.new(false), Cell.new(false), Cell.new(false), Cell.new(false), Cell.new(false)],
       [Cell.new(false), Cell.new(false), Cell.new(false), Cell.new(false), Cell.new(false), Cell.new(false), Cell.new(false), Cell.new(false), Cell.new(false)],
     ]
+
+    it 'should be different' do 
+      exprestion = true
+      first = Marshal.load(Marshal.dump(ms.step))
+      second = Marshal.load(Marshal.dump(ms.step))
+      exprestion &&= first != second
+      third = Marshal.load(Marshal.dump(ms.step))
+      exprestion &&= (first != third && third != second)
+      fourth = Marshal.load(Marshal.dump(ms.step))
+      exprestion &&= (first != fourth && second != fourth && third != fourth)
+      fifth = Marshal.load(Marshal.dump(ms.step))
+      exprestion &&= (first != fifth && second != fifth && third != fifth && fourth != fifth)
+
+      expect(exprestion).to eq true
+    end
   end
 end
