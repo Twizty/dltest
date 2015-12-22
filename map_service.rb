@@ -48,7 +48,7 @@ class MapService
       row = 0
     end
 
-    # нижнаяя ячейка
+    # нижняя ячейка
     if @map[row].length > j + 1
       res << @map[row][j+1]
     else
