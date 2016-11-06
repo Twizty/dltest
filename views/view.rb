@@ -12,11 +12,7 @@ class View
 
   def render(data)
     begin
-      Curses.setpos(0, 0)  # column 6, row 3
-      # Curses.addstr data.map { |row| "[#{row.map(&:state).join(', ')}]" }.join("\n")
-      # Curses.attron(color_pair(COLOR_RED)|A_NORMAL) {
-      #   Curses.addstr data.map { |row| row.map { |e| e.alive? ? '●'.colorize(:red) : '●' }.join(' ') }.join("\n")
-      # }
+      Curses.setpos(0, 0)
       data.each do |row|
         row.each do |cell|
           if cell.alive?
@@ -30,14 +26,9 @@ class View
         Curses.addstr "\n"
       end
 
-      Curses.getch
+      yield
     ensure
       Curses.close_screen
     end
-    # Curses.init_screen
-    # Curses.clear
-    # Curses.setpos 6, 3
-    # Curses.addstr data.map { |row| "[#{row.map(&:state).join(', ')}]" }.join("\n")
-    # Curses.close_screen
   end
 end
