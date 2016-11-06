@@ -1,7 +1,7 @@
-require_relative '../../services/map_service.rb'
+require_relative '../../services/get_next_generation_service.rb'
 require_relative '../../models/cell.rb'
 
-RSpec.describe MapService do
+RSpec.describe GetNextGenerationService do
   context 'cycle case test' do
     let(:map) do
       [
@@ -14,14 +14,14 @@ RSpec.describe MapService do
     end
 
     it 'should be turned' do
-      step_res = MapService.new(map).next_generation
+      step_res = GetNextGenerationService.new(map).perform
       result = step_res[1][2].alive? && step_res[2][2].alive? && step_res[3][2].alive?
       expect(result).to eq true
     end
 
     it 'should be equal' do
-      step_res1 = MapService.new(map).next_generation
-      step_res2 = MapService.new(step_res1).next_generation
+      step_res1 = GetNextGenerationService.new(map).perform
+      step_res2 = GetNextGenerationService.new(step_res1).perform
       result = step_res2[2][1].alive? && step_res2[2][2].alive? && step_res2[2][3].alive?
       expect(result).to eq true
     end
@@ -40,7 +40,7 @@ RSpec.describe MapService do
     end
 
     it 'should be return different value' do
-      step_res = MapService.new(map).next_generation
+      step_res = GetNextGenerationService.new(map).perform
       result = 
         step_res[1][2].alive? && step_res[1][3].alive? &&
         step_res[2][2].alive? && step_res[2][3].alive? &&
@@ -50,9 +50,9 @@ RSpec.describe MapService do
     end
 
     it 'should be return the same value' do
-      step1 = MapService.new(map).next_generation
-      step2 = MapService.new(step1).next_generation
-      step3 = MapService.new(step2).next_generation
+      step1 = GetNextGenerationService.new(map).perform
+      step2 = GetNextGenerationService.new(step1).perform
+      step3 = GetNextGenerationService.new(step2).perform
       result = 
         step2[1][2].alive? && step2[1][3].alive? &&
         step2[2][1].alive? && step2[2][4].alive? &&
@@ -66,28 +66,30 @@ RSpec.describe MapService do
   end
 
   context 'various case test' do
-    ms = MapService.new [
-      [Cell.dead, Cell.dead, Cell.dead,  Cell.dead,  Cell.dead,  Cell.dead,  Cell.dead,  Cell.dead, Cell.dead],
-      [Cell.dead, Cell.dead, Cell.dead,  Cell.dead,  Cell.dead,  Cell.dead,  Cell.dead,  Cell.dead, Cell.dead],
-      [Cell.dead, Cell.dead, Cell.dead,  Cell.dead,  Cell.dead,  Cell.dead,  Cell.dead,  Cell.dead, Cell.dead],
-      [Cell.dead, Cell.dead, Cell.dead,  Cell.dead,  Cell.dead,  Cell.dead,  Cell.dead,  Cell.dead, Cell.dead],
-      [Cell.dead, Cell.dead, Cell.alive, Cell.alive, Cell.alive, Cell.alive, Cell.alive, Cell.dead, Cell.dead],
-      [Cell.dead, Cell.dead, Cell.dead,  Cell.dead,  Cell.dead,  Cell.dead,  Cell.dead,  Cell.dead, Cell.dead],
-      [Cell.dead, Cell.dead, Cell.dead,  Cell.dead,  Cell.dead,  Cell.dead,  Cell.dead,  Cell.dead, Cell.dead],
-      [Cell.dead, Cell.dead, Cell.dead,  Cell.dead,  Cell.dead,  Cell.dead,  Cell.dead,  Cell.dead, Cell.dead],
-      [Cell.dead, Cell.dead, Cell.dead,  Cell.dead,  Cell.dead,  Cell.dead,  Cell.dead,  Cell.dead, Cell.dead],
-    ]
+    let(:map) do
+      [
+        [Cell.dead, Cell.dead, Cell.dead,  Cell.dead,  Cell.dead,  Cell.dead,  Cell.dead,  Cell.dead, Cell.dead],
+        [Cell.dead, Cell.dead, Cell.dead,  Cell.dead,  Cell.dead,  Cell.dead,  Cell.dead,  Cell.dead, Cell.dead],
+        [Cell.dead, Cell.dead, Cell.dead,  Cell.dead,  Cell.dead,  Cell.dead,  Cell.dead,  Cell.dead, Cell.dead],
+        [Cell.dead, Cell.dead, Cell.dead,  Cell.dead,  Cell.dead,  Cell.dead,  Cell.dead,  Cell.dead, Cell.dead],
+        [Cell.dead, Cell.dead, Cell.alive, Cell.alive, Cell.alive, Cell.alive, Cell.alive, Cell.dead, Cell.dead],
+        [Cell.dead, Cell.dead, Cell.dead,  Cell.dead,  Cell.dead,  Cell.dead,  Cell.dead,  Cell.dead, Cell.dead],
+        [Cell.dead, Cell.dead, Cell.dead,  Cell.dead,  Cell.dead,  Cell.dead,  Cell.dead,  Cell.dead, Cell.dead],
+        [Cell.dead, Cell.dead, Cell.dead,  Cell.dead,  Cell.dead,  Cell.dead,  Cell.dead,  Cell.dead, Cell.dead],
+        [Cell.dead, Cell.dead, Cell.dead,  Cell.dead,  Cell.dead,  Cell.dead,  Cell.dead,  Cell.dead, Cell.dead],
+      ]
+    end
 
     it 'should be different' do 
       exprestion = true
-      first = Marshal.load(Marshal.dump(ms.next_generation))
-      second = Marshal.load(Marshal.dump(ms.next_generation))
+      first = GetNextGenerationService.new(map).perform
+      second = GetNextGenerationService.new(first).perform
       exprestion &&= first != second
-      third = Marshal.load(Marshal.dump(ms.next_generation))
+      third = GetNextGenerationService.new(second).perform
       exprestion &&= (first != third && third != second)
-      fourth = Marshal.load(Marshal.dump(ms.next_generation))
+      fourth = GetNextGenerationService.new(third).perform
       exprestion &&= (first != fourth && second != fourth && third != fourth)
-      fifth = Marshal.load(Marshal.dump(ms.next_generation))
+      fifth = GetNextGenerationService.new(fourth).perform
       exprestion &&= (first != fifth && second != fifth && third != fifth && fourth != fifth)
 
       expect(exprestion).to eq true
@@ -95,7 +97,7 @@ RSpec.describe MapService do
   end
 
   context '#next_to' do
-    ms = MapService.new [
+    ms = GetNextGenerationService.new [
       [Cell.dead, Cell.dead,  Cell.dead,  Cell.dead,  Cell.dead],
       [Cell.dead, Cell.dead,  Cell.dead,  Cell.dead,  Cell.dead],
       [Cell.dead, Cell.alive, Cell.alive, Cell.alive, Cell.dead],

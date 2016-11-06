@@ -1,4 +1,4 @@
-class MapService
+class GetNextGenerationService
   LIFE_BIRTH_COUNT = 3
   LIFE_DEATH_UPPER_LIMIT = 3
   LIFE_DEATH_BOTTOM_LIMIT = 2
@@ -9,7 +9,7 @@ class MapService
     @map = map
   end
 
-  def next_generation
+  def perform
     new_map = []
 
     @map.each_with_index do |row, i|

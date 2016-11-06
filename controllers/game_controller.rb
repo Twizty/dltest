@@ -1,4 +1,4 @@
-require './services/map_service.rb'
+require './services/get_next_generation_service.rb'
 require './services/input_reader_service.rb'
 require './views/view.rb'
 
@@ -11,7 +11,7 @@ class GameController
   def start
     render @map
     loop do
-      @map = MapService.new(@map).next_generation
+      @map = GetNextGenerationService.new(@map).perform
       render @map
     end
   end
