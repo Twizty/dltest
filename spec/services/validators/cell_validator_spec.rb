@@ -1,6 +1,6 @@
-require_relative '../../../services/validators/input_validator.rb'
+require_relative '../../../services/validators/cell_validator.rb'
 
-RSpec.describe Validators::InputValidator do
+RSpec.describe Validators::CellValidator do
   context '#valid?' do
     let(:invalid_value) { 'INVALID_VALUE' }
 

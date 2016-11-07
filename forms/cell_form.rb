@@ -1,4 +1,4 @@
-require './services/validators/input_validator.rb'
+require './services/validators/cell_validator.rb'
 require './models/cell.rb'
 
 class CellForm
@@ -11,7 +11,7 @@ class CellForm
   end
 
   def valid?
-    Validators::InputValidator.new(value).valid?
+    Validators::CellValidator.new(value).valid?
   end
 
   def cell
